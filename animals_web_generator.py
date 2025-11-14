@@ -1,9 +1,26 @@
 import json
+import os
+import requests
+from dotenv import load_dotenv
 
-def load_data(file_path):
-    """ Loads a JSON file """
-    with open(file_path, "r", encoding="utf-8") as handle:
-        return json.load(handle)
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
+
+
+def fetch_animal(animal_name):
+    url = f"https://api.api-ninjas.com/v1/animals?name={animal_name}"
+    headers = {"X-Api-Key": API_KEY}
+    response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        return None
+
+    data = response.json()
+    if len(data) == 0:
+        return None
+
+    return data
+
 
 def serialize_animal(animal):
     """Convert an animal object into an HTML list item."""
@@ -52,7 +69,7 @@ def write_html_template(data, file_path):
 
 
 def main():
-    animals_data = load_data('animals_data.json')
+    animals_data = fetch_animal("fox")
     animals_info = get_animals_info(animals_data)
     html_template = load_html_template('animals_template.html')
     html_new_template = html_template.replace("__REPLACE_ANIMALS_INFO__", animals_info)
