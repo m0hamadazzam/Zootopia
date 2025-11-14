@@ -71,7 +71,10 @@ def write_html_template(data, file_path):
 def main():
     user_animal = input("Enter animals name: ")
     animals_data = fetch_animal(user_animal.lower())
-    animals_info = get_animals_info(animals_data)
+    if not animals_data:
+        animals_info = f"<h2>The animal \"{user_animal}\" doesn't exist.</h2>"
+    else:
+        animals_info = get_animals_info(animals_data)
     html_template = load_html_template('animals_template.html')
     html_new_template = html_template.replace("__REPLACE_ANIMALS_INFO__", animals_info)
     write_html_template(html_new_template, "animals.html")
