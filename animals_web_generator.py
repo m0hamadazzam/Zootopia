@@ -69,7 +69,8 @@ def write_html_template(data, file_path):
 
 
 def main():
-    animals_data = fetch_animal("fox")
+    user_animal = input("Enter animals name: ")
+    animals_data = fetch_animal(user_animal.lower())
     animals_info = get_animals_info(animals_data)
     html_template = load_html_template('animals_template.html')
     html_new_template = html_template.replace("__REPLACE_ANIMALS_INFO__", animals_info)
